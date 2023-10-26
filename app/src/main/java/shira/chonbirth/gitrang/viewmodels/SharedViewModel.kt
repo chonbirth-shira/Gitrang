@@ -6,8 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import shira.chonbirth.gitrang.data.models.APData
+import shira.chonbirth.gitrang.data.models.APListData
 import shira.chonbirth.gitrang.data.models.BookmarkListData
 import shira.chonbirth.gitrang.data.models.MainContentData
 import shira.chonbirth.gitrang.data.models.MainListData
@@ -20,12 +24,32 @@ class SharedViewModel @Inject constructor(
     private val repository: SharedRepository
     ): ViewModel() {
 
+    // READ AP LIST
+//    private val _allAPList = MutableStateFlow<List<APListData>>(emptyList())
+//    val allAPList: StateFlow<List<APListData>> = _allAPList
+//    fun getAPList(){
+//        viewModelScope.launch {
+//            repository.getAPList.collect {
+//                _allAPList.value = it
+//            }
+//        }
+//    }
+
     /////////////////
     ///  OTHERS  ///
     ////////////////
     val searchAppBarState: MutableState<Boolean> = mutableStateOf(false)
     val searchTextState: MutableState<String> = mutableStateOf("")
     var openDeleteDialog: MutableState<Boolean> = mutableStateOf(false)
+    var openItemDeleteDialog: MutableState<Boolean> = mutableStateOf(false)
+    val bookmark: MutableState<BookmarkListData> = mutableStateOf(value = BookmarkListData(0,"",""))
+    var groupPopUp: MutableState<Boolean> = mutableStateOf(false)
+    var sharePopUp: MutableState<Boolean> = mutableStateOf(false)
+    var actionDialog: MutableState<Boolean> = mutableStateOf(false)
+    var title: MutableState<String> = mutableStateOf("")
+    var id: MutableState<String> = mutableStateOf("")
+    var bookmark1: MutableState<Boolean> = mutableStateOf(false)
+    var category: MutableState<String> = mutableStateOf("")
 
     /////////////////
     ///   LIST   ///
@@ -99,6 +123,18 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+
+    // GROUP LIST
+    private val _groupList = MutableStateFlow<List<String>>(emptyList())
+    val groupList: StateFlow<List<String>> = _groupList
+    fun getGroupList(){
+        viewModelScope.launch {
+            repository.groupList.collect{
+                _groupList.value = it
+            }
+        }
+    }
+
     /////////////////
     /// BOOKMARK ///
     ////////////////
@@ -146,6 +182,34 @@ class SharedViewModel @Inject constructor(
     fun deleteAll(){
         viewModelScope.launch {
             repository.deleteAllTask()
+        }
+    }
+
+    // LIST AP
+    private val _allAp = MutableStateFlow<List<APListData>>(emptyList())
+    val allAp: StateFlow<List<APListData>> = _allAp
+    fun getAllAp(){
+        viewModelScope.launch {
+            repository.getAllAp.collect{
+                _allAp.value = it
+            }
+        }
+    }
+
+    // READ CONTENT AP
+    private val _selectedAP = MutableStateFlow<RequestState<APData>>(RequestState.Idle)
+    val selectedAP: StateFlow<RequestState<APData>> = _selectedAP
+
+    fun getSelectedAP(id: Int){
+        _selectedAP.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.getSelectedAP(apId = id).collect { item ->
+                    _selectedAP.value = RequestState.Success(item)
+                }
+            }
+        }catch (e: Exception){
+            _selectedAP.value = RequestState.Error(e)
         }
     }
 }

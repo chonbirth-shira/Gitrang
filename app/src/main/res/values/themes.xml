@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Gitrang" parent="android:Theme.Material.Light.NoActionBar">
-<!--        <item name="android:statusBarColor">@color/verydark</item>-->
+    <style name="Theme.Gitrang" parent="android:Theme.Material.NoActionBar">
     </style>
 
     <style name="Theme.Gitrang.Starting" parent="Theme.SplashScreen">
         // Set the splash screen background, animated icon, and animation duration.
-
         <item name="windowSplashScreenBackground">@color/verydark</item>
 
         // Use windowSplashScreenAnimatedIcon to add either a drawable or an

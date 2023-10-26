@@ -43,6 +43,11 @@ interface MainDatabaseDao {
     @Query("SELECT * FROM main_table WHERE id=:gitId")
     fun getSelectedGit(gitId: Int): Flow<MainContentData>
 
+
+    // GROUP CONTENT
+    @Query("SELECT DISTINCT category FROM list_table")
+    fun groupList(): Flow<List<String>>
+
     /////////////////
     /// BOOKMARK ///
     ////////////////
@@ -70,4 +75,17 @@ interface MainDatabaseDao {
     // DELETE ALL BOOKMARK
     @Query("DELETE FROM bookmark_table")
     suspend fun deleteAllBookmark()
+
+
+    ///////////////////////////////
+    /// Aganchakgrike Poraiani ///
+    /////////////////////////////
+
+    // LIST AP
+    @Query("SELECT * FROM aplist_table")
+    fun getAPList(): Flow<List<APListData>>
+
+    // READ CONTENT
+    @Query("SELECT * FROM ap_table WHERE id=:apId")
+    fun getSelectedAP(apId: Int): Flow<APData>
 }

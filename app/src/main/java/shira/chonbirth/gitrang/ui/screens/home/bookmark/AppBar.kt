@@ -1,42 +1,62 @@
 package shira.chonbirth.gitrang.ui.screens.home.bookmark
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import shira.chonbirth.gitrang.viewmodels.SharedViewModel
-import shira.chonbirth.gitrang.ui.theme.HeavyWhiteGray
-import shira.chonbirth.gitrang.ui.theme.VeryDarkGray
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookmarkAppBar(sharedViewModel: SharedViewModel) {
+fun BookmarkAppBar(sharedViewModel: SharedViewModel, scrollBehavior: TopAppBarScrollBehavior) {
     val count by sharedViewModel.getCount.collectAsState(0)
-    Surface(modifier = Modifier.fillMaxWidth(), elevation = AppBarDefaults.TopAppBarElevation, color = VeryDarkGray) {
-        var expanded by remember { mutableStateOf(false) }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp)){
-            Text(modifier = Modifier.align(Alignment.Center), text = "Bookmarks", style = MaterialTheme.typography.h5, color = Color.White)
-            IconButton(onClick = { expanded = true }, modifier = Modifier.align(
-                Alignment.CenterEnd)) {
-                Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = null, tint = HeavyWhiteGray)
-                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    DropdownMenuItem(onClick = {
+    var expanded by remember { mutableStateOf(false) }
+    CenterAlignedTopAppBar(
+        title = {
+            Text("Bookmark", maxLines = 1, overflow = TextOverflow.Ellipsis)
+        },
+        actions = {
+            // RowScope here, so these icons will be placed horizontally
+            IconButton(onClick = { expanded = true }) {
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = "Localized description"
+                )
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false}){
+                    DropdownMenuItem(text = { Text("Delete All") }, onClick = {
                         expanded = false
                         sharedViewModel.openDeleteDialog.value = true
-                    }, enabled = count != 0) {
-                        Text(text = "Delete All", fontWeight = FontWeight.Bold)
-                    }
+                    }, enabled = count != 0)
+                    DropdownMenuItem(text = { Text("Delete one by one") }, onClick = {
+                        expanded = false
+                        sharedViewModel.openDeleteDialog.value = true
+                    }, enabled = count != 0)
                 }
             }
-        }
-    }
+        },
+        scrollBehavior = scrollBehavior
+    )
+//    Surface(modifier = Modifier.fillMaxWidth(), shadowElevation = TOP_APP_BAR_HEIGHT, color = VeryDarkGray) {
+//        Box(modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(12.dp)){
+//            Text(modifier = Modifier.align(Alignment.Center), text = "Bookmarks", style = MaterialTheme.typography.titleLarge, color = Color.White)
+//            IconButton(onClick = { expanded = true }, modifier = Modifier.align(
+//                Alignment.CenterEnd)) {
+//                Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = null, tint = HeavyWhiteGray)
+//                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+//                    DropdownMenuItem(text = { Text(text = "Delete All", fontWeight = FontWeight.Bold) },
+//                        onClick = {  expanded = false
+//                            sharedViewModel.openDeleteDialog.value = true }, enabled = count != 0)
+////                    DropdownMenuItem(onClick = {
+////                        expanded = false
+////                        sharedViewModel.openDeleteDialog.value = true
+////                    }, enabled = count != 0) {
+////                        Text(text = "Delete All", fontWeight = FontWeight.Bold)
+////                    }
+//                }
+//            }
+//        }
+//    }
 }

@@ -9,6 +9,10 @@ import javax.inject.Inject
 @ViewModelScoped
 class SharedRepository @Inject constructor(private val databaseDao: MainDatabaseDao) {
 
+
+    // READ AP LIST
+//    val getAPList: Flow<List<APListData>> = databaseDao.getAPList()
+
     /////////////////
     ///   LIST   ///
     ////////////////
@@ -48,6 +52,10 @@ class SharedRepository @Inject constructor(private val databaseDao: MainDatabase
         return databaseDao.getSelectedGit(gitId = gitId)
     }
 
+
+    // GROUP LIST
+    val groupList: Flow<List<String>> = databaseDao.groupList()
+
     /////////////////
     /// BOOKMARK ///
     ////////////////
@@ -74,6 +82,14 @@ class SharedRepository @Inject constructor(private val databaseDao: MainDatabase
     // DELETE ALL BOOKMARK
     suspend fun deleteAllTask(){
         databaseDao.deleteAllBookmark()
+    }
+
+    // LIST AP
+    val getAllAp: Flow<List<APListData>> = databaseDao.getAPList()
+
+    // READ CONTENT AP
+    fun getSelectedAP(apId: Int): Flow<APData>{
+        return databaseDao.getSelectedAP(apId = apId)
     }
 
 //

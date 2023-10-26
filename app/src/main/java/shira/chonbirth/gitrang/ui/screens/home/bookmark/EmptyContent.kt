@@ -4,11 +4,11 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,18 +29,12 @@ fun EmptyContent() {
     AnimatedVisibility(visible = boolean, enter = fadeIn(animationSpec = tween(800))) {
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(MaterialTheme.colors.background), verticalArrangement = Arrangement.Center, Alignment.CenterHorizontally) {
-        Icon(modifier = Modifier.size(100.dp), imageVector = Icons.Default.Favorite, contentDescription = null, tint = HeavyWhiteGray)
+        .background(MaterialTheme.colorScheme.background), verticalArrangement = Arrangement.Center, Alignment.CenterHorizontally) {
+        Icon(modifier = Modifier.size(100.dp), imageVector = Icons.Default.Favorite, contentDescription = null, tint = MaterialTheme.colorScheme.primaryContainer)
         Spacer(modifier = Modifier.height(30.dp))
-        Text(text = "No bookmark to show", color = HeavyWhiteGray, fontWeight = FontWeight.Bold, fontSize = MaterialTheme.typography.h6.fontSize)
+        Text(text = "No bookmark to show", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = "All bookmark added will be shown here ", color = HeavyWhiteGray.copy(alpha = 0.6f), fontSize = MaterialTheme.typography.caption.fontSize)
+        Text(text = "All bookmark added will be shown here ", color = HeavyWhiteGray, fontSize = MaterialTheme.typography.titleSmall.fontSize)
     }
     }
-}
-
-@Composable
-@Preview
-private fun EmptyContentPreview() {
-    EmptyContent()
 }
